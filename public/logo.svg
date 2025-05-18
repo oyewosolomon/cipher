@@ -9,7 +9,7 @@
     strokeLinecap="round"
     strokeLinejoin="round"
     className="h-6 w-6 text-white"
->
+    >    
     <path d="M14 19l-3 3-3-3"/>
     <path d="M12 15V2"/>
     <path d="M20 10c0 4.418-8 12-8 12S4 14.418 4 10a8 8 0 0 1 16 0Z"/>
