@@ -12,7 +12,16 @@ type ModelType = "shield" | "lock" | "network" | "data"
 function ShieldModel({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1 }) {
   const mesh = useRef<THREE.Mesh>(null!)
 
-
+  // Animate the shield
+  useFrame((state) => {
+    if (mesh.current) {
+      // Use state.delta for frame-rate independent animation
+      mesh.current.rotation.y = Math.sin(state.clock.getElapsedTime() * 0.3) * 0.2
+      // Use state.camera position to add subtle responsiveness
+      const distanceFromCamera = state.camera.position.z / 5
+      mesh.current.scale.setScalar(0.9 + 0.1 * distanceFromCamera)
+    }
+  })
 
   return (
     <group position={position as any} rotation={rotation as any} scale={scale}>
@@ -43,13 +52,22 @@ function LockModel({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1 }) {
   const [hover, setHover] = useState(false)
 
   // Animate the lock
-  useFrame((state) => {
+  useFrame((state:any) => {
     if (lockShackle.current) {
+      // Use state.delta for smoother transitions
+      const targetY = hover ? 0.6 : 0.3
+      const speed = 1.5 * state.delta
       lockShackle.current.position.y = THREE.MathUtils.lerp(
         lockShackle.current.position.y, 
-        hover ? 0.6 : 0.3, 
-        0.1
+        targetY, 
+        Math.min(speed, 0.1)
       )
+      
+      // Add subtle breathing animation based on viewport aspect
+      const breatheAmount = 0.02 * Math.sin(state.clock.getElapsedTime())
+      if (lockBody.current) {
+        lockBody.current.scale.y = 1 + breatheAmount
+      }
     }
   })
 
