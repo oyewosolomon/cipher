@@ -12,12 +12,7 @@ type ModelType = "shield" | "lock" | "network" | "data"
 function ShieldModel({ position = [0, 0, 0], rotation = [0, 0, 0], scale = 1 }) {
   const mesh = useRef<THREE.Mesh>(null!)
 
-  // Animate the shield
-  useFrame((state) => {
-    if (mesh.current) {
-      mesh.current.rotation.y = Math.sin(state.clock.getElapsedTime() * 0.3) * 0.2
-    }
-  })
+
 
   return (
     <group position={position as any} rotation={rotation as any} scale={scale}>
